@@ -1,0 +1,14 @@
+{
+  "name": "groot-generator",
+  "version": "0.0.1",
+  "dependencies": {
+    "yargs": "^8.0.1"
+  },
+  "bin": {
+    "groot-generator": "./bin/groot-generator.js"
+  },
+  "engines": {
+    "node": ">= 6.9.3",
+    "npm": ">= 3"
+  }
+}

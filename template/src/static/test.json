@@ -1,0 +1,7 @@
+{
+  "code": 200,
+  "datas": {
+      "key": "value"
+  },
+  "msg": "It's OK!"
+}

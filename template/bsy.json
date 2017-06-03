@@ -1,0 +1,15 @@
+{
+    "name": "",
+    "type": "",
+    "repository": {},
+    "builder": "groot-builder",
+    "options": {
+        "dev": {
+            "apiDomain": "http://localhost:8080"
+        },
+
+        "prod": {
+            "apiDomain": "http://localhost:8080"
+        }
+    }
+}
