@@ -1,7 +1,5 @@
 {
   "code": 200,
-  "datas": {
-      "key": "value"
-  },
+  "datas": "/static/bird.jpg",
   "msg": "It's OK!"
 }

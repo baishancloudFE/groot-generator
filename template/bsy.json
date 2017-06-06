@@ -4,6 +4,8 @@
     "repository": {},
     "builder": "groot-builder",
     "options": {
+        "port": 8080,
+
         "dev": {
             "apiDomain": "http://localhost:8080"
         },

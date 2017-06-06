@@ -4,6 +4,7 @@
   "dependencies": {
     "yargs": "^8.0.1"
   },
+  "main": "./index.js",
   "bin": {
     "groot-generator": "./bin/groot-generator.js"
   },
