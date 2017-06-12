@@ -1,5 +1,5 @@
 {
-  "name": "igotc-groot-generator",
+  "name": "igroot-generator",
   "version": "0.0.2",
   "dependencies": {
     "colors": "^1.1.2",
