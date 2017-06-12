@@ -20,8 +20,8 @@ const copy = (src, to, callback) => {
         const copyIsOver = copyOver(paths.length)
 
         paths.forEach(item => {
-            const _src = src + '\\' + item
-            const _dist = to + "\\" + item
+            const _src = path.join(src, item)
+            const _dist = path.join(to, item)
 
             fs.stat(_src, (err, st) => {
                 if(err) throw err
