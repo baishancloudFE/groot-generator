@@ -1,4 +1,5 @@
 import {httpRequest} from './http_request'
+import {notification} from 'igroot'
 
 // 默认头部信息
 const defaultHeaders = {
@@ -7,22 +8,25 @@ const defaultHeaders = {
     'Content-Type': 'application/json;charset=utf-8'
 }
 
+// error 弹出锁, 避免弹出框过多
+let errorLock = false
+
 const warp = method =>  (data, showSuccessMsg = true) => {
     httpRequest[method](this.baseUrl, data, {}, {}, showSuccessMsg)
         .then(parseResponse)
         .then(res => {
             if (res !== false) {
                 const [,,,,showSuccessMsg] = args
-                // if (res.code !== 200)
-                //     notification.error({message: '校验失败', description: res.msg})
-                // else
-                //     showSuccessMsg && notification.success({message: '请求成功', description: res.msg ? res.msg : ''})
+                if (res.code !== 200)
+                    notification.error({message: '校验失败', description: res.msg})
+                else
+                    showSuccessMsg && notification.success({message: '请求成功', description: res.msg ? res.msg : ''})
 
                 return res
             } else if (res.code !== 200) {}
         })
         .catch(err => {
-            // notification.error({message: '请求失败', description: '报错信息请打开控制台查看'})
+            notification.error({message: '请求失败', description: '报错信息请打开控制台查看'})
             throw err
         })
 }
@@ -61,23 +65,42 @@ const parseResponse = (response) => {
 
             if (status !== 200) {
                 if (json.code !== 200) {
-                    // notification.error({
-                    //     message: `返回结果失败 code:${json.code}`, description: json.msg ? json.msg : json.message || ''
-                    // })
+                    notification.error({
+                        message: `返回结果失败 code:${json.code}`, description: json.msg ? json.msg : json.message || ''
+                    })
                     return json
                 } else {
-                    // notification.error({
-                    //     message: `请求失败 status:${status}`,
-                    //     description: ''
-                    // })
+                    notification.error({
+                        message: `请求失败 status:${status}`,
+                        description: ''
+                    })
                     return false
                 }
-            } else if (status === 200) {
+            } else {
+                if (json.code !== 200) {
+                    // 弹出提示框
+                    if(!errorLock) {
+                        errorLock = true
+                        setTimeout(() => errorLock = false, 2000)
+
+                        notification.error({
+                            message: `校验失败 code: ${json.code}`, description: json.msg ? json.msg : json.message || ''
+                        })
+                    }
+
+                    // 非 200 状态操作
+                    if (json.code === 401) {
+                        window.location.href = "/#/"
+                        return false
+                    }
+                } else
+                    showSuccessMsg && notification.success({message: '请求成功', description: json.msg ? json.msg : ''})
+
                 if (json.code === 401) {
-                    // notification.error({
-                    //     message: `校验失败 code:${json.code}`, description: json.msg ? json.msg : json.message || ''
-                    // })
-                    // store.dispatch({type: "logout"})
+                    notification.error({
+                        message: `登录校验失败 code:${json.code}`, description: json.msg ? json.msg : json.message || ''
+                    })
+
                     window.location.href = "/#/"
                     return false
                 }
@@ -100,9 +123,16 @@ const parseResponse = (response) => {
  */
 export class ApiBase {
     constructor(configs) {
-        if (typeof configs !== 'string') {
-            // TODO: 待完善
-        } else {this.baseUrl = APP_CONFIG.apiDomain + configs}
+        const confType = typeof configs
+
+        if (typeof confType === 'Object')
+            this.baseUrl = APP_CONFIG[configs.group].apiDomain + configs.url
+
+        else if (confType === 'string')
+            this.baseUrl = APP_CONFIG.default.apiDomain + configs
+
+        else
+            throw new TypeError('API object constructor argument must be the object or string')
     }
 
     /**

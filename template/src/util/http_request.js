@@ -42,5 +42,5 @@ export const httpRequest = {
     patch: request('PATCH'),
     post: request('POST'),
     put: request('PUT'),
-    delete: request('DELETE'),
+    delete: request('DELETE')
 }

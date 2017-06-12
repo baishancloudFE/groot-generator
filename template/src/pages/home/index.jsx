@@ -1,4 +1,4 @@
-import {Layout, Menu, Breadcrumb, Icon} from 'groot'
+import {Layout, Menu, Breadcrumb, Icon} from 'igroot'
 import React from 'react'
 import ReactDOM from 'react-dom'
 

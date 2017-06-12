@@ -1,12 +1,13 @@
 {
-  "name": "gotc-groot-generator",
-  "version": "0.0.1",
+  "name": "igotc-groot-generator",
+  "version": "0.0.2",
   "dependencies": {
+    "colors": "^1.1.2",
     "yargs": "^8.0.1"
   },
   "main": "./index.js",
   "bin": {
-    "groot-generator": "./bin/groot-generator.js"
+    "igroot-generator": "./bin/igroot-generator.js"
   },
   "engines": {
     "node": ">= 6.9.0",

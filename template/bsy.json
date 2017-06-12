@@ -2,16 +2,17 @@
     "name": "",
     "type": "",
     "repository": {},
-    "builder": "groot-builder",
+    "builder": "igroot-builder",
     "options": {
+        "homepage": "home",
         "port": 8080,
 
         "dev": {
-            "apiDomain": "http://localhost:8080"
+            "default": {"apiDomain": "http://localhost:8080"}
         },
 
         "prod": {
-            "apiDomain": "http://localhost:8080"
+            "default": {"apiDomain": "http://localhost:8080"}
         }
     }
 }

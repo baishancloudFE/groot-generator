@@ -1,7 +1,19 @@
 const fs = require("fs")
 const path = require("path")
+const dir = require("./dir")
+
+// 这是替换符 (@'v'@)
+const REPLACE_SYMBOL = "__\\(@'v'@\\)__"
+
+const isHtml = /.*\.html$/
+const isPage = /.*src(\\|\\\\|\/)pages(\\|\\\\|\/).+/
+const matchDirName = /.*(\\|\\\\|\/)(.*)$/
+const ReplaceReg = new RegExp(REPLACE_SYMBOL, "g")
 
 const copy = (src, to, callback) => {
+    src = path.resolve(__dirname, src)
+    to = dir(to)
+
     fs.readdir(src, (err, paths) => {
         if (err) throw err
 
@@ -15,13 +27,26 @@ const copy = (src, to, callback) => {
                 if(err) throw err
 
                 if(st.isFile()) {
-                    const readable = fs.createReadStream(_src)
+                    // const readable = fs.createReadStream(_src)
                     const writable = fs.createWriteStream(_dist)
 
-                    readable.pipe(writable)
-                } else if(st.isDirectory()) {
-                    dir(_src, _dist)
-                }
+                    new Promise((reslove, reject) => {
+                        if(isHtml.test(_src) && isPage.test(to)) {
+                            const dirName = matchDirName.exec(to)[2]
+
+                            fs.readFile(_src, 'utf-8', (err, data) => {
+                                if(err) throw err
+
+                                reslove(Buffer.from(data.replace(ReplaceReg, dirName)))
+                            })
+                        } else
+                            fs.readFile(_src, (err, data) => {
+                                if(err) reject(err)
+                                else    reslove(data)
+                            })
+                    }).then(fileBuffer => writable.end(fileBuffer))
+                } else if(st.isDirectory())
+                    copyDir(_src, _dist)
 
                 if(copyIsOver() && callback)
                     callback()
@@ -30,7 +55,7 @@ const copy = (src, to, callback) => {
     })
 }
 
-const dir = (src, to) => {
+const copyDir = (src, to) => {
     fs.exists(to, (err, exists) => {
         if(err) throw err
 

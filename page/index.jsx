@@ -6,7 +6,7 @@ import './index.scss'
 
 window.React = React
 
-class Home extends Component {
+class App extends Component {
     state = {}
 
     render() {
@@ -28,4 +28,4 @@ class Home extends Component {
 }
 
 // Render the main component into the dom
-render(<Home />, document.getElementById('app'))
+render(<App />, document.getElementById('app'))

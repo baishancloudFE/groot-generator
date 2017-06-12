@@ -5,7 +5,7 @@ const init = require('../command/init')
 const add = require('../command/add')
 
 require('yargs')
-    .usage('Groot Generator')
+    .usage('iGroot Generator')
     .command(
         'init',
         'Initialize Groot application',

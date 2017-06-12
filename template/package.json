@@ -1,5 +1,5 @@
 {
-  "name": "groot-app",
+  "name": "igroot-app",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -8,7 +8,7 @@
   "dependencies": {
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "gotc-groot": "^0.1.3"
+    "igroot": "^0.1.3"
   },
   "engines": {
     "node": ">= 6.9.3",
