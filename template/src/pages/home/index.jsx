@@ -2,7 +2,7 @@ import {Layout, Menu, Breadcrumb, Icon} from 'igroot'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import {TestApi} from '@/apis/test.api'
+import {API} from '@/apis/'
 
 import './index.scss'
 
@@ -16,11 +16,11 @@ class App extends React.Component {
     }
 
     componentWillMount() {
-        TestApi.get()
+        API.test.get()
             .then(res => this.setState({
                 content: JSON.stringify(res),
                 imgSrc: res.datas
-            }))
+            })).then(() => API.test2.two())
     }
 
     render() {

@@ -12,21 +12,37 @@ const defaultHeaders = {
 let errorLock = false
 
 const warp = method =>  (data, showSuccessMsg = true) => {
-    httpRequest[method](this.baseUrl, data, {}, {}, showSuccessMsg)
+    httpRequest[method](this.url, data, {}, {}, showSuccessMsg)
         .then(parseResponse)
         .then(res => {
-            if (res !== false) {
-                const [,,,,showSuccessMsg] = args
-                if (res.code !== 200)
-                    notification.error({message: '校验失败', description: res.msg})
-                else
-                    showSuccessMsg && notification.success({message: '请求成功', description: res.msg ? res.msg : ''})
+            const [,,,,showSuccessMsg] = args
 
-                return res
-            } else if (res.code !== 200) {}
+            if (res.code !== 200) {
+                // 弹出提示框
+                if(!errorLock) {
+                    errorLock = true
+                    setTimeout(() => errorLock = false, 2000)
+
+                    notification.error({
+                        message: `请求失败 code: ${res.code}`,
+                        description: res.msg ? res.msg : res.message || ''
+                    })
+                }
+            } else
+                showSuccessMsg && notification.success({
+                    message: '请求成功',
+                    description: res.msg ? res.msg : ''
+                })
+
+            return res
         })
+
         .catch(err => {
-            notification.error({message: '请求失败', description: '报错信息请打开控制台查看'})
+            notification.error({
+                message: '请求失败',
+                description: '报错信息请打开控制台查看'
+            })
+
             throw err
         })
 }
@@ -35,8 +51,7 @@ const warp = method =>  (data, showSuccessMsg = true) => {
  * 响应体解析
  * @param {Response} response
  */
-const parseResponse = (response) => {
-    // TODO: 逻辑还是不严谨，还需要判断非 json 字符串，以及加上状态码判断
+const parseResponse = response => {
     return response.clone().text()
         .then(text => new Promise((resolve, reject) => {
             if (text === '' || text === undefined)
@@ -56,58 +71,6 @@ const parseResponse = (response) => {
             } else
                 return json
         })
-
-        .then(json => {
-            //  todo: 这边要根据相应的接口协定逻辑进行处理
-            //  todo: 修改then逻辑，如果接口异常，统一返回false,
-            //        所以在数据处理层要做一个判断，判断不是false才执行相应逻辑
-            const {status} = response
-
-            if (status !== 200) {
-                if (json.code !== 200) {
-                    notification.error({
-                        message: `返回结果失败 code:${json.code}`, description: json.msg ? json.msg : json.message || ''
-                    })
-                    return json
-                } else {
-                    notification.error({
-                        message: `请求失败 status:${status}`,
-                        description: ''
-                    })
-                    return false
-                }
-            } else {
-                if (json.code !== 200) {
-                    // 弹出提示框
-                    if(!errorLock) {
-                        errorLock = true
-                        setTimeout(() => errorLock = false, 2000)
-
-                        notification.error({
-                            message: `校验失败 code: ${json.code}`, description: json.msg ? json.msg : json.message || ''
-                        })
-                    }
-
-                    // 非 200 状态操作
-                    if (json.code === 401) {
-                        window.location.href = "/#/"
-                        return false
-                    }
-                } else
-                    showSuccessMsg && notification.success({message: '请求成功', description: json.msg ? json.msg : ''})
-
-                if (json.code === 401) {
-                    notification.error({
-                        message: `登录校验失败 code:${json.code}`, description: json.msg ? json.msg : json.message || ''
-                    })
-
-                    window.location.href = "/#/"
-                    return false
-                }
-            }
-
-            return json
-        })
 }
 
 /**
@@ -116,8 +79,7 @@ const parseResponse = (response) => {
  *   - 数据格式的转化，最好放在 service 层
  * 
  * 属性：
- *   baseUrl       基础路径
- *   uniqueField   唯一键值的属性名称
+ *   url       基础路径
  *   apiKey        路由
  *   actionsMate   操作{api函数  =>  接口操作key }对照表
  */
@@ -125,11 +87,11 @@ export class ApiBase {
     constructor(configs) {
         const confType = typeof configs
 
-        if (typeof confType === 'Object')
-            this.baseUrl = APP_CONFIG[configs.group].apiDomain + configs.url
+        if (confType === 'object')
+            this.url = APP_CONFIG[configs.group].apiDomain + configs.url
 
         else if (confType === 'string')
-            this.baseUrl = APP_CONFIG.default.apiDomain + configs
+            this.url = APP_CONFIG.default.apiDomain + configs
 
         else
             throw new TypeError('API object constructor argument must be the object or string')
@@ -199,8 +161,17 @@ export class ApiBase {
             delete data['per_page']
         }
 
-        return httpRequest.get(this.baseUrl, data, headers, fetchObj)
+        return httpRequest.get(this.url, data, headers, fetchObj)
             .then(parseResponse)
+            .then(res => {
+                if(res.code !== 200)
+                    notification.error({
+                        message: `请求失败 code: ${res.code}`,
+                        description: res.msg ? res.msg : res.message || ''
+                    })
+
+                return res
+            })
     }
 
     post = warp('post')
@@ -237,7 +208,7 @@ export class ApiBase {
         //     // 增加隐藏窗口，下载相应文件
         //     // todo: 如果下载多了的话，会有多个 iframe
         //     const iframe = document.createElement('iframe')
-        //     iframe.src = `${this.baseUrl}?${urlParameters}`
+        //     iframe.src = `${this.url}?${urlParameters}`
         //     iframe.style.display = 'none'
         //     document.body.appendChild(iframe)
     }
