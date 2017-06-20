@@ -6,9 +6,13 @@
     "options": {
         "homepage": "home",
         "port": 8080,
+        "theme": {
+            "primary-color": "#1DA57A"
+        },
 
         "dev": {
-            "default": {"apiDomain": "http://localhost:8080"}
+            "default": {"apiDomain": "http://localhost:8080"},
+            "test": {"apiDomain": "http://localhost:8080"}
         },
 
         "prod": {
