@@ -1,4 +1,4 @@
-import {ApiBase} from '@/util/apiBase'
+import {ApiBase} from '@/util/api'
 import {extend} from '@/util/function'
 import {apis} from './api'
 
