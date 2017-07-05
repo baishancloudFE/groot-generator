@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
-import {render} from 'react-dom'
+import React, { Component } from 'react'
+import { render } from 'react-dom'
 
-import {TestApi} from '../../apis/test.api'
+import { Api } from '@@'
 import './index.scss'
 
 window.React = React
@@ -10,20 +10,20 @@ class App extends Component {
     state = {}
 
     render() {
-        const {testData} = this.state
+        const { testData } = this.state
 
         return (
             <div id="app">
-                <img src="/static/bird.jpg" alt="bird"/> <br/>
-                welcome to React! <br/>
+                <img src="/static/bird.jpg" alt="bird" /> <br />
+                welcome to React! <br />
                 {testData}
             </div>
         )
     }
 
     componentWillMount() {
-        TestApi.get()
-            .then(json => this.setState({testData: JSON.stringify(json)}))
+        Api.test.get()
+            .then(json => this.setState({ testData: JSON.stringify(json) }))
     }
 }
 
