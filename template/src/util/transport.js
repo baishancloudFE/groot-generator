@@ -31,6 +31,7 @@ export class Transport extends LokkaTransport {
     this.endpoint = APP_CONFIG[options.group || 'default'].apiDomain + endpoint
     this.handleHttpErrors = options.handleHttpErrors || handleHttpErrors
     this.handleGraphQLErrors = options.handleGraphQLErrors || handleGraphQLErrors
+    this.handleSuccess = options.handleSuccess || function() {}
   }
 
   _buildOptions(payload) {
@@ -70,7 +71,7 @@ export class Transport extends LokkaTransport {
       if (errors) {
         this.handleGraphQLErrors(errors, data)
         return null
-      }
+      } else { this.handleSuccess(data) }
 
       return data
     })

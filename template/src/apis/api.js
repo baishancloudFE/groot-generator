@@ -48,6 +48,13 @@ export const client = {
         message: 'GraphQL请求错误',
         description: `${message}`
       })
-    }
+    },
+
+    /**
+     * 自定义 GraphQL 成功处理函数(仅 mutation 会触发)
+     * 
+     * 能到这个函数，说明 HTTP 与 GraphQL 都没有错误
+     */
+    handleSuccess() { notification.success({ message: '请求成功' }) }
   }
 }

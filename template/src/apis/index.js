@@ -43,6 +43,9 @@ const Client = (() => {
     // client 处理
     function clientHandle(url, options) {
       const query = lokkaFactory(`/${url}/query`, options)
+
+      delete options.handleSuccess
+
       const mutation = lokkaFactory(`/${url}/mutation`, options)
 
       /**

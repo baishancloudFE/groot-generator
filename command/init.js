@@ -6,6 +6,6 @@ require('../tools/colors')()
 module.exports = function (name) {
     copy("../template/", name, () => {
         console.log('\ninitialize complete!\n'.success)
-        console.log('please run:', `\n   cd ${name}\n   npm install && sl-core run`.info)
+        console.log('please run:', `\n   cd ${name}\n   npm install && sl run`.info)
     })
 }
