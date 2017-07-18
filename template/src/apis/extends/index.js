@@ -1,5 +1,5 @@
-import {test2} from './test2'
+import { test2 } from './test2'
 
 export const extend = {
-    test2
+  test2
 }

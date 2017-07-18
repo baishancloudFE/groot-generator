@@ -7,24 +7,24 @@ import './index.scss'
 window.React = React
 
 class App extends Component {
-    state = {}
+  state = {}
 
-    render() {
-        const { testData } = this.state
+  render() {
+    const { testData } = this.state
 
-        return (
-            <div id="app">
-                <img src="/static/bird.jpg" alt="bird" /> <br />
-                welcome to React! <br />
-                {testData}
-            </div>
-        )
-    }
+    return (
+      <div id="app">
+        <img src="/static/bird.jpg" alt="bird" /> <br />
+        welcome to React! <br />
+        {testData}
+      </div>
+    )
+  }
 
-    componentWillMount() {
-        Api.test.get()
-            .then(json => this.setState({ testData: JSON.stringify(json) }))
-    }
+  componentWillMount() {
+    Api.test.get()
+      .then(json => this.setState({ testData: JSON.stringify(json) }))
+  }
 }
 
 // Render the main component into the dom
