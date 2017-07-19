@@ -12,7 +12,11 @@
 
     "dev": {
       "default": {"apiDomain": "http://localhost:8080"},
-      "test": {"apiDomain": "http://localhost:8080"}
+      "example": {"apiDomain": "http://localhost:8080"}
+    },
+
+    "test": {
+      "default": {"apiDomain": "http://localhost:8080"}
     },
 
     "prod": {
