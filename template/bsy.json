@@ -5,7 +5,9 @@
   "builder": "igroot-builder",
   "options": {
     "homepage": "home",
+    "domain": "localhost",
     "port": 8080,
+    "lint": true,
     "theme": {
       "primary-color": "#1DA57A"
     },

@@ -8,7 +8,7 @@ function handleHttpErrors(response) {
 
 // 默认 GraphQL 错误处理
 function handleGraphQLErrors(errors, data) {
-  const {message} = errors[0]
+  const { message } = errors[0]
   const error = new Error(`GraphQL Error: ${message}`)
   error.rawError = errors
   error.rawData = data
@@ -57,7 +57,7 @@ export class Transport extends LokkaTransport {
   }
 
   send(query, variables, operationName) {
-    const payload = {query, variables, operationName}
+    const payload = { query, variables, operationName }
     const options = this._buildOptions(payload)
 
     return fetch(this.endpoint, options).then(response => {
@@ -66,7 +66,7 @@ export class Transport extends LokkaTransport {
         this.handleHttpErrors(response)
 
       return response.json()
-    }).then(({data, errors}) => {
+    }).then(({ data, errors }) => {
       // GraphQL 错误处理
       if (errors) {
         this.handleGraphQLErrors(errors, data)

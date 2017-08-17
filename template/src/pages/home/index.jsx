@@ -22,18 +22,15 @@ class App extends React.Component {
         imgSrc: res.datas
       })).then(() => Api.test2.two())
 
-    const StudentFragment = Client.fragment({
-      type: 'Student',
-      fields: ['name', 'id', 'parent']
-    })
-
-    Client.mutate(`
-      ($id: Int){
-        createStudent(id: $id) {
-          ...${StudentFragment}
+    const id = 123
+    Client.query(`
+      {
+        user(id: ${id}) {
+          id
+          name
         }
       }
-    `, {id: 12})
+    `).then(({ user }) => console.log(user))
   }
 
   render() {

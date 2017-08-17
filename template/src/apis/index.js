@@ -1,9 +1,9 @@
-import {Lokka} from 'lokka'
+import { Lokka } from 'lokka'
 
-import {ApiBase} from '@/util/api'
-import {Transport} from '@/util/transport'
-import {extend} from '@/util/function'
-import {apis, client} from './api'
+import { ApiBase } from '@/util/api'
+import { Transport } from '@/util/transport'
+import { extend } from '@/util/function'
+import { apis, client } from './api'
 
 const Api = {}
 
@@ -20,15 +20,15 @@ const Client = (() => {
     const type = typeof client 
 
     // 无 GraphQL 接口
-    if(type === undefined)
+    if (type === undefined)
       return
 
     // 无配置
-    if(type === 'string')
+    if (type === 'string')
       return clientHandle(client)
 
     // 有配置
-    if(type === 'object')
+    if (type === 'object')
       return clientHandle(client.url, client.options)
 
     throw new TypeError('GraphQL Client configuration error!')
@@ -67,8 +67,8 @@ const Client = (() => {
    * @param {string} type    Scheme 提供的 Type
    * @param {array}  fields  查询字段数组(字符串一维数组)
    */
-  _Client.fragment = ({type, fields}) => {
-    if(!type || !Array.isArray(fields))
+  _Client.fragment = ({ type, fields }) => {
+    if (!type || !Array.isArray(fields))
       throw new TypeError('type is required! And fields must be a array!')
 
     return _Client.createFragment(`
@@ -81,4 +81,4 @@ const Client = (() => {
   return _Client
 })()
 
-export {Api, Client}
+export { Api, Client }

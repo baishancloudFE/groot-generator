@@ -37,12 +37,12 @@ export const client = {
      * 
      * 能到这个函数, 说明响应中存在 error 对象
      * 
-     * @param {object}     errors GraphQL错误对象
+     * @param {array[object]}     errors GraphQL错误对象
      * @param {object}     data   GraphQL数据对象
      * @return {undefined}
      */
     handleGraphQLErrors(errors, data) {
-      const {message} = errors[0]
+      const { message } = errors[0]
 
       notification.error({
         message: 'GraphQL请求错误',
