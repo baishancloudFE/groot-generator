@@ -1,13 +1,14 @@
 {
-  "name": "igroot-generator",
-  "version": "0.2.7",
+  "name": "sl-generator",
+  "version": "0.1.0",
   "dependencies": {
     "colors": "^1.1.2",
+    "inquirer": "^3.3.0",
     "yargs": "^8.0.1"
   },
   "main": "./index.js",
   "bin": {
-    "igroot-generator": "./bin/igroot-generator.js"
+    "sl-generator": "./bin/igroot-generator.js"
   },
   "engines": {
     "node": ">= 6.9.0",
