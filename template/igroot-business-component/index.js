@@ -1,2 +1,1 @@
-import Component from './src/'
-export default Component
+export * from './src/'

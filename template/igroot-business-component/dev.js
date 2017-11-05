@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Component from './index'
+import Component from './src/demo'
 
 ReactDOM.render(
   React.createElement(Component),
