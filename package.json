@@ -1,6 +1,6 @@
 {
   "name": "sl-generator",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "dependencies": {
     "colors": "^1.1.2",
     "inquirer": "^3.3.0",

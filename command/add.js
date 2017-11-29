@@ -53,7 +53,7 @@ module.exports = (page, component) => {
 }
 
 function install(component) {
-  npm.load(undefined, function(err) {
+  npm.load({save: true}, function(err) {
     if(err) return console.error('\n\nFailed to load npm T^T...\n'.error)
 
     npm.install(process.cwd(), component, function(err) {
@@ -65,8 +65,10 @@ function install(component) {
         if (err) console.error(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'businessComponents\' object\n`.error)
 
         const bsy = JSON.parse(data)
-        bsy.businessComponents = bsy.businessComponents || []
-        bsy.businessComponents.push(component)
+        bsy.options.businessComponents = bsy.options.businessComponents || []
+
+        if (bsy.options.businessComponents.indexOf(component) === -1)
+          bsy.options.businessComponents.push(component)
 
         fs.writeFile(target, JSON.stringify(bsy, undefined, 2), function(err) {
           if (err) console.error(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'businessComponents\' object\n`.error)
