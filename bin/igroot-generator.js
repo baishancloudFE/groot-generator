@@ -17,7 +17,7 @@ require('yargs')
     'add',
     'arguments description:\n \t-p [name]\tAdd a new page to ./src/pages\n \t-c [name]\tAdd a new component to ./src/components',
     {},
-    argv => add(argv.p)
+    argv => add(argv.p, argv.c)
   )
 
   .demandCommand()
