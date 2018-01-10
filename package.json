@@ -1,8 +1,9 @@
 {
   "name": "sl-generator",
   "version": "0.2.1",
+  "description": "SL应用生成器",
   "dependencies": {
-    "colors": "^1.1.2",
+    "chalk": "2.3.0",
     "inquirer": "^3.3.0",
     "yargs": "^8.0.1"
   },

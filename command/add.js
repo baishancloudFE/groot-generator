@@ -1,18 +1,17 @@
 const fs = require('fs')
 const npm = require('npm')
 const path = require('path')
+const chalk = require('chalk')
 const inquirer = require('inquirer')
 const copy = require('./../tools/copy')
-
-require('../tools/colors')()
 
 module.exports = (page, component) => {
   if (typeof page === 'string') {
     const pagePath = path.resolve(`./src/pages/${page}`)
 
     copy("../page/", pagePath, () => {
-      console.log('\nPage templates to complete!'.success)
-      console.log('Generate the path as follows: ' + pagePath.info)
+      console.log(chalk.green('\nPage templates to complete!'))
+      console.log('Generate the path as follows: ' + chalk.blue(pagePath))
     })
   }
 
@@ -54,15 +53,15 @@ module.exports = (page, component) => {
 
 function install(component) {
   npm.load({save: true}, function(err) {
-    if(err) return console.error('\n\nFailed to load npm T^T...\n'.error)
+    if(err) return console.error(chalk.red('\n\nFailed to load npm T^T...\n'))
 
     npm.install(process.cwd(), component, function(err) {
-      if (err) return console.error(`\n\nFailed to install component '${component}' T^T...\n`.error)
+      if (err) return console.error(chalk.red(`\n\nFailed to install component '${component}' T^T...\n`))
 
       const target = path.join(process.cwd(), 'bsy.json')
 
       fs.readFile(target, function (err, data) {
-        if (err) console.error(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'businessComponents\' object\n`.error)
+        if (err) console.error(chalk.red(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'businessComponents\' object\n`))
 
         const bsy = JSON.parse(data)
         bsy.options.businessComponents = bsy.options.businessComponents || []
@@ -71,8 +70,8 @@ function install(component) {
           bsy.options.businessComponents.push(component)
 
         fs.writeFile(target, JSON.stringify(bsy, undefined, 2), function(err) {
-          if (err) console.error(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'businessComponents\' object\n`.error)
-          console.log(`\n\n'${component}' has been installed.\n`.info)
+          if (err) console.error(chalk.red(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'businessComponents\' object\n`))
+          console.log(chalk.blue(`\n\n'${component}' has been installed.\n`))
         })
       })
     })

@@ -1,8 +1,7 @@
 const path = require('path')
+const chalk = require('chalk')
 const inquirer = require('inquirer')
 const copy = require('./../tools/copy')
-
-require('../tools/colors')()
 
 module.exports = function() {
   const questions = [{
@@ -37,15 +36,15 @@ function initCallback({name, type}) {
   switch(type) {
     case 'iGroot Project':
       return () => {
-        console.log('\ninitialize complete!\n'.success)
-        console.log('please run:', `\n   cd ${name}\n   npm install && sl dev`.info)
+        console.log(chalk.green('\ninitialize complete!\n'))
+        console.log('please run:', chalk.blue(`\n   cd ${name}\n   npm install\n   sl dev`))
       }
 
     case 'iGroot Business Component':
       return () => {
-        console.log('\ninitialize complete!\n'.success)
-        console.log('if you need to develop and debugging the iGroot business component, please run:'.info)
-        console.log(`\n   cd ${name}\n   npm install && sl dev`.info)
+        console.log(chalk.green('\ninitialize complete!\n'))
+        console.log(chalk.blue('if you need to develop and debugging the iGroot business component, please run:'))
+        console.log(chalk.blue(`\n   cd ${name}\n   npm install\n   sl dev`))
       }
   }
 }
