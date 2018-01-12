@@ -52,7 +52,10 @@ module.exports = (page, component) => {
 }
 
 function install(component) {
-  npm.load({save: true}, function(err) {
+  npm.load({
+    save: true,
+    registry: 'https://registry.npm.taobao.org'
+  }, function(err) {
     if(err) return console.error(chalk.red('\n\nFailed to load npm T^T...\n'))
 
     npm.install(process.cwd(), component, function(err) {
