@@ -2,9 +2,9 @@ const fs = require('fs')
 const npm = require('npm')
 const ora = require('ora')
 const path = require('path')
-const Git = require('nodegit')
 const chalk = require('chalk')
 const inquirer = require('inquirer')
+const {exec} = require('child_process')
 const copy = require('./../tools/copy')
 
 module.exports = function() {
@@ -33,21 +33,27 @@ module.exports = function() {
     const {name, type} = answers
 
     if (type === 'iGroot Project') {
-      const spinner = ora(`Cloning into '${chalk.blue(name)}' from '${chalk.blue('https://github.com/baishancloudFE/igroot-template-sider')}'...`)
+      const response = 'https://github.com/baishancloudFE/igroot-template-sider'
+      const spinner = ora(`Cloning into '${chalk.blue(name)}' from '${chalk.blue(response)}'...`)
 
       spinner.start()
-      return Git.Clone('https://github.com/baishancloudFE/igroot-template-sider', path.join(process.cwd(), name))
-        .then(repository => new Promise((resolve, reject) => {
-          const appPath = path.join(process.cwd(), name)
-          const dependencies = Object.keys(require(appPath + '/package.json').dependencies)
 
-          spinner.stop()
-          resolve({
-            name,
-            path: appPath,
-            modules: dependencies
-          })
-        }).then(install))
+      return exec(`git clone ${response} ${path.join(process.cwd(), name)}`, (err, stdout, stderr) => {
+        if (err) {
+          console.error(chalk.red('\ngit clone failed !\n'))
+          throw err
+        }
+
+        const appPath = path.join(process.cwd(), name)
+        const dependencies = Object.keys(require(appPath + '/package.json').dependencies)
+
+        spinner.stop()
+        install({
+          name,
+          path: appPath,
+          modules: dependencies
+        })
+      })
     }
 
     return copy(`../template/${type.toLowerCase().replace(/\s/g, '-')}`, name, initCallback(answers))
