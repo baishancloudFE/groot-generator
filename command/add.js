@@ -5,7 +5,10 @@ const chalk = require('chalk')
 const inquirer = require('inquirer')
 const copy = require('./../tools/copy')
 
-module.exports = (page, component) => {
+module.exports = (argv = {}) => {
+  const page = argv.p
+  const component = argv.c
+
   if (typeof page === 'string') {
     const pagePath = path.resolve(`./src/pages/${page}`)
 
