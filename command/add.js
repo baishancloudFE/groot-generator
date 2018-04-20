@@ -67,16 +67,16 @@ function install(component) {
       const target = path.join(process.cwd(), 'bsy.json')
 
       fs.readFile(target, function (err, data) {
-        if (err) console.error(chalk.red(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'businessComponents\' object\n`))
+        if (err) console.error(chalk.red(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'esModule\' object\n`))
 
         const bsy = JSON.parse(data)
-        bsy.options.businessComponents = bsy.options.businessComponents || []
+        bsy.options.esModule = bsy.options.esModule || []
 
-        if (bsy.options.businessComponents.indexOf(component) === -1)
-          bsy.options.businessComponents.push(component)
+        if (bsy.options.esModule.indexOf(component) === -1)
+          bsy.options.esModule.push(component)
 
         fs.writeFile(target, JSON.stringify(bsy, undefined, 2), function(err) {
-          if (err) console.error(chalk.red(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'businessComponents\' object\n`))
+          if (err) console.error(chalk.red(`\n\ncomponent \'${component}\' has been installed, but \'bsy.json\' has been read/write error, please manually add the component information to the \'esModule\' object\n`))
           console.log(chalk.blue(`\n\n'${component}' has been installed.\n`))
         })
       })
