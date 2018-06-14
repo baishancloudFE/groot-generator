@@ -1,6 +1,6 @@
 {
   "name": "sl-generator",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "SL应用生成器",
   "dependencies": {
     "chalk": "2.3.0",
