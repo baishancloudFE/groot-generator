@@ -8,7 +8,9 @@ const inquirer = require('inquirer')
 const {exec} = require('child_process')
 const copy = require('./../tools/copy')
 
-module.exports = function(args) {
+module.exports = function(args, collect = () => {}) {
+  collect({}, true)
+
   const questions = [{
     type: 'list',
     name: 'type',
@@ -53,7 +55,7 @@ module.exports = function(args) {
           name,
           path: appPath,
           modules: dependencies
-        }, () => initCallback(answers))
+        }, initCallback(answers))
       })
     }
 
@@ -71,10 +73,26 @@ function initCallback({name, type}) {
       }
 
     case 'iGroot Project' :
-      return rm(
-        path.resolve(name, '.git'),
-        err => err && console.log(chalk.yellow(`\nFailed to remove the '${path.resolve(name, '.git')}' folder! Please remove it manually.\n`))
-      )
+      return err => {
+        if (err) throw err
+
+        // install 函数执行时已将根目录变更，因此无需再加上 name
+        const bsyPath = path.resolve('bsy.json')
+        const packagePath = path.resolve('package.json')
+        const gitFolder = path.resolve('.git')
+
+        const bsy = require(bsyPath)
+        const package = require(packagePath)
+
+        // 修改 bsy.json 与 package.json 中的项目名
+        bsy.name = name
+        package.name = name
+        fs.writeFile(bsyPath, JSON.stringify(bsy, null, 2), err => err && console.log(chalk.yellow(`Failed to change the name in 'bsy.json'! Please change it manually.`)))
+        fs.writeFile(packagePath, JSON.stringify(package, null, 2), err => err && console.log(chalk.yellow(`Failed to change the name in 'package.json'! Please change it manually.`)))
+
+        // 移除 .git 文件夹
+        rm(gitFolder, err => err && console.log(chalk.yellow(`\nFailed to remove the '${gitFolder}' folder! Please remove it manually.\n`)))
+      }
   }
 }
 
@@ -84,8 +102,7 @@ function install({name, path, modules}, callback) {
   npm.load({registry: 'https://registry.npm.taobao.org'}, function (err) {
     if (err) {
       console.error(chalk.red('\n\nFailed to load npm, please manually install the dependencies T^T...\n'))
-      callback(err)
-      return
+      return callback(err)
     }
 
     console.log('\n\nInstalling packages. This might take a couple of minutes.')
@@ -93,12 +110,13 @@ function install({name, path, modules}, callback) {
     npm.install(path, ...modules, function (err) {
       if (err) {
         console.error(chalk.red('\n\nFailed to install dependencies T^T...\n'))
-        callback(err)
-        return
+        return callback(err)
       }
 
       console.log(chalk.green('\nDone.\n'))
       console.log('please run:', chalk.blue(`\n   cd ${name} & sl dev`))
+
+      callback()
     })
   })
 }
