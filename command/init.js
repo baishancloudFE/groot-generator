@@ -8,6 +8,11 @@ const inquirer = require('inquirer')
 const {exec} = require('child_process')
 const copy = require('./../tools/copy')
 
+const template = {
+  'iGroot Project': 'https://github.com/baishancloudFE/igroot-template-sider.git',
+  'iGroot Business Component': 'https://github.com/baishancloudFE/igroot-component-template.git',
+}
+
 module.exports = function(args, collect = () => {}) {
   collect({}, true)
 
@@ -35,31 +40,29 @@ module.exports = function(args, collect = () => {}) {
   inquirer.prompt(questions).then(answers => {
     const {name, type} = answers
 
-    if (type === 'iGroot Project') {
-      const response = 'https://github.com/baishancloudFE/igroot-template-sider'
-      const spinner = ora(`Cloning into '${chalk.blue(name)}' from '${chalk.blue(response)}'...`)
+    const response = template[type]
+    const spinner = ora(`Cloning into '${chalk.blue(name)}' from '${chalk.blue(response)}'...`)
 
-      spinner.start()
+    spinner.start()
 
-      return exec(`git clone ${response} ${path.join(process.cwd(), name)}`, (err, stdout, stderr) => {
-        if (err) {
-          console.error(chalk.red('\ngit clone failed !\n'))
-          throw err
-        }
+    return exec(`git clone ${response} ${path.join(process.cwd(), name)}`, (err, stdout, stderr) => {
+      if (err) {
+        console.error(chalk.red('\ngit clone failed !\n'))
+        throw err
+      }
 
-        const appPath = path.join(process.cwd(), name)
-        const dependencies = Object.keys(require(appPath + '/package.json').dependencies)
+      const appPath = path.join(process.cwd(), name)
+      const dependencies = Object.keys(require(appPath + '/package.json').dependencies)
 
-        spinner.stop()
-        install({
-          name,
-          path: appPath,
-          modules: dependencies
-        }, initCallback(answers))
-      })
-    }
+      spinner.stop()
+      install({
+        name,
+        path: appPath,
+        modules: dependencies
+      }, initCallback(answers))
+    })
 
-    return copy(`../template/${type.toLowerCase().replace(/\s/g, '-')}`, name, () => initCallback(answers))
+    // copy(`../template/${type.toLowerCase().replace(/\s/g, '-')}`, name, () => initCallback(answers))
   })
 }
 
